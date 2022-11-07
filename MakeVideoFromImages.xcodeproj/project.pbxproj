@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4264541529197B6600F0598B /* ImagesToVideoConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4264541429197B6600F0598B /* ImagesToVideoConvert.swift */; };
 		A096168029190353000CFC4A /* MakeVideoFromImagesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */; };
 		A096168229190353000CFC4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096168129190353000CFC4A /* ContentView.swift */; };
 		A096168429190354000CFC4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A096168329190354000CFC4A /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4264541429197B6600F0598B /* ImagesToVideoConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesToVideoConvert.swift; sourceTree = "<group>"; };
 		A096167C29190353000CFC4A /* MakeVideoFromImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MakeVideoFromImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeVideoFromImagesApp.swift; sourceTree = "<group>"; };
 		A096168129190353000CFC4A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				A09616972919075D000CFC4A /* ShowCameraView.swift */,
+				4264541429197B6600F0598B /* ImagesToVideoConvert.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -190,6 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A096169B29191809000CFC4A /* SelectedImages.swift in Sources */,
+				4264541529197B6600F0598B /* ImagesToVideoConvert.swift in Sources */,
 				A096168229190353000CFC4A /* ContentView.swift in Sources */,
 				A09616982919075D000CFC4A /* ShowCameraView.swift in Sources */,
 				A0961694291905AA000CFC4A /* HomeView.swift in Sources */,

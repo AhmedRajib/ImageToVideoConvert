@@ -22,9 +22,6 @@ struct HomeView: View {
             
             SelectedImages(selectedImages: $selectedImages)
             
-            if selectedImages.count == 0 {
-                
-            }
             PhotosPicker(selection: $selectedItems,maxSelectionCount: 2,matching: .any(of: [.images, .videos])) {
                 Label(selectedImages.count > 0 ? "Make Video" : "Select ImagesFor Making Video" , image: "photo.artframe")
             }
@@ -36,6 +33,7 @@ struct HomeView: View {
                             selectedImages.append(image)
                         }
                     }
+                    ImagesToVideoConvert().buildVideoFromImageArray(selectedImages: selectedImages)
                 }
             }
         }
