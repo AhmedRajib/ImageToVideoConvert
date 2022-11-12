@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4264541529197B6600F0598B /* ImagesToVideoConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4264541429197B6600F0598B /* ImagesToVideoConvert.swift */; };
+		427D2F2B291ADB13004E9EE8 /* mergeImageTwoVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427D2F2A291ADB13004E9EE8 /* mergeImageTwoVideo.swift */; };
 		A096168029190353000CFC4A /* MakeVideoFromImagesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */; };
 		A096168229190353000CFC4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096168129190353000CFC4A /* ContentView.swift */; };
 		A096168429190354000CFC4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A096168329190354000CFC4A /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		4264541429197B6600F0598B /* ImagesToVideoConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesToVideoConvert.swift; sourceTree = "<group>"; };
+		427D2F2A291ADB13004E9EE8 /* mergeImageTwoVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mergeImageTwoVideo.swift; sourceTree = "<group>"; };
 		A096167C29190353000CFC4A /* MakeVideoFromImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MakeVideoFromImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeVideoFromImagesApp.swift; sourceTree = "<group>"; };
 		A096168129190353000CFC4A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 			children = (
 				A09616972919075D000CFC4A /* ShowCameraView.swift */,
 				4264541429197B6600F0598B /* ImagesToVideoConvert.swift */,
+				427D2F2A291ADB13004E9EE8 /* mergeImageTwoVideo.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 				A0961694291905AA000CFC4A /* HomeView.swift in Sources */,
 				A096168F29190561000CFC4A /* HomeViewModel.swift in Sources */,
 				A096168029190353000CFC4A /* MakeVideoFromImagesApp.swift in Sources */,
+				427D2F2B291ADB13004E9EE8 /* mergeImageTwoVideo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

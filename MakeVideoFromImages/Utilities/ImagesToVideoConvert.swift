@@ -91,7 +91,7 @@ class ImagesToVideoConvert {
                     print("-----video1 url = \(self.imageArrayToVideoURL)")
                     
                     asset = AVAsset(url: imageArrayToVideoURL as URL)
-                    //                    exportVideoWithAnimation()
+                    exportVideoWithAnimation()
                 }
             })
         }
@@ -118,18 +118,18 @@ class ImagesToVideoConvert {
         guard let timerange =  try? await CMTimeRangeMake(start: CMTime.zero, duration: (asset?.load(.duration))!) else {
             return
         }
-                                                          
-                                                          let compositionVideoTrack:AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())!
-                                                          
-                                                          do {
+        
+        let compositionVideoTrack:AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: CMPersistentTrackID())!
+        
+        do {
             try compositionVideoTrack.insertTimeRange(timerange, of: videoTrack, at: CMTime.zero)
             compositionVideoTrack.preferredTransform = videoTrack.preferredTransform
         } catch {
             print(error)
         }
-                                                          
-                                                          //if your video has sound, you don’t need to check this
-                                                          if audioIsEnabled {
+        
+        //if your video has sound, you don’t need to check this
+        if audioIsEnabled {
             let compositionAudioTrack:AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())!
             
             for audioTrack in (asset?.tracks(withMediaType: AVMediaType.audio))! {
@@ -140,22 +140,22 @@ class ImagesToVideoConvert {
                 }
             }
         }
-                                                          
-                                                          let size = videoTrack.naturalSize
-                                                          
-                                                          let videolayer = CALayer()
-                                                          videolayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-                                                          
-                                                          let parentlayer = CALayer()
-                                                          parentlayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-                                                          parentlayer.addSublayer(videolayer)
-                                                          
-                                                          ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                          //this is the animation part
-                                                          var time = [0.00001, 3, 6, 9, 12] //I used this time array to determine the start time of a frame animation. Each frame will stay for 3 secs, thats why their difference is 3
-                                                          var imgarray = [UIImage]()
-                                                          
-                                                          for image in 0..<5 {
+        
+        let size = videoTrack.naturalSize
+        
+        let videolayer = CALayer()
+        videolayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        let parentlayer = CALayer()
+        parentlayer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        parentlayer.addSublayer(videolayer)
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //this is the animation part
+        var time = [0.00001, 3, 6, 9, 12] //I used this time array to determine the start time of a frame animation. Each frame will stay for 3 secs, thats why their difference is 3
+        var imgarray = [UIImage]()
+        
+        for image in 0..<5 {
             imgarray.append(UIImage(named: "\(image + 1).JPG")!)
             
             let nextPhoto = imgarray[image]
@@ -415,27 +415,27 @@ class ImagesToVideoConvert {
             
             parentlayer.addSublayer(blackLayer)
         }
-                                                          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                          
-                                                          let layercomposition = AVMutableVideoComposition()
-                                                          layercomposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
-                                                          layercomposition.renderSize = size
-                                                          layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videolayer, in: parentlayer)
-                                                          let instruction = AVMutableVideoCompositionInstruction()
-                                                          instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: composition.duration)
-                                                          let videotrack = composition.tracks(withMediaType: AVMediaType.video)[0] as AVAssetTrack
-                                                          let layerinstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videotrack)
-                                                          instruction.layerInstructions = [layerinstruction]
-                                                          layercomposition.instructions = [instruction]
-                                                          
-                                                          let animatedVideoURL = NSURL(fileURLWithPath: NSHomeDirectory() + "/Documents/video2.mp4")
-                                                          removeFileAtURLIfExists(url: animatedVideoURL)
-                                                          
-                                                          guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else {return}
-                                                          assetExport.videoComposition = layercomposition
-                                                          assetExport.outputFileType = AVFileType.mp4
-                                                          assetExport.outputURL = animatedVideoURL as URL
-                                                          assetExport.exportAsynchronously(completionHandler: {
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        let layercomposition = AVMutableVideoComposition()
+        layercomposition.frameDuration = CMTimeMake(value: 1, timescale: 30)
+        layercomposition.renderSize = size
+        layercomposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videolayer, in: parentlayer)
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(start: CMTime.zero, duration: composition.duration)
+        let videotrack = composition.tracks(withMediaType: AVMediaType.video)[0] as AVAssetTrack
+        let layerinstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videotrack)
+        instruction.layerInstructions = [layerinstruction]
+        layercomposition.instructions = [instruction]
+        
+        let animatedVideoURL = NSURL(fileURLWithPath: NSHomeDirectory() + "/Documents/video2.mp4")
+        removeFileAtURLIfExists(url: animatedVideoURL)
+        
+        guard let assetExport = AVAssetExportSession(asset: composition, presetName:AVAssetExportPresetHighestQuality) else {return}
+        assetExport.videoComposition = layercomposition
+        assetExport.outputFileType = AVFileType.mp4
+        assetExport.outputURL = animatedVideoURL as URL
+        assetExport.exportAsynchronously(completionHandler: {
             switch assetExport.status{
             case  AVAssetExportSession.Status.failed:
                 print("failed \(String(describing: assetExport.error))")
@@ -445,8 +445,8 @@ class ImagesToVideoConvert {
                 print("Exported")
             }
         })
-                                                          }
-                                                          
-                                                          }
-                                                          
-                                                          
+    }
+    
+}
+
+
