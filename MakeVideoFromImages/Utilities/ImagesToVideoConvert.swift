@@ -19,7 +19,7 @@ class ImagesToVideoConvert {
     let audioIsEnabled: Bool = false //if your video has no sound
     var asset: AVAsset!
     
-    func buildVideoFromImageArray(selectedImages: [UIImage]) {
+    func buildVideoFromImageArray(selectedImages: [UIImage]) -> String {
         //           for image in 0..<5 {
         //               selectedPhotosArray.append(UIImage(named: "\(image + 1).JPG")!) //name of the images: 1.JPG, 2.JPG, 3.JPG, 4.JPG, 5.JPG
         //           }
@@ -30,7 +30,7 @@ class ImagesToVideoConvert {
         guard let videoWriter = try? AVAssetWriter(outputURL: imageArrayToVideoURL as URL, fileType: AVFileType.mp4) else {
             fatalError("AVAssetWriter error")
         }
-        let outputSettings = [AVVideoCodecKey : AVVideoCodecH264, AVVideoWidthKey : NSNumber(value: Float(outputSize.width)), AVVideoHeightKey : NSNumber(value: Float(outputSize.height))] as [String : Any]
+        let outputSettings = [AVVideoCodecKey : AVVideoCodecType.h264, AVVideoWidthKey : NSNumber(value: Float(outputSize.width)), AVVideoHeightKey : NSNumber(value: Float(outputSize.height))] as [String : Any]
         guard videoWriter.canApply(outputSettings: outputSettings, forMediaType: AVMediaType.video) else {
             fatalError("Negative : Can't apply the Output settings...")
         }
@@ -87,14 +87,23 @@ class ImagesToVideoConvert {
                     frameCount += 1
                 }
                 videoWriterInput.markAsFinished()
-                videoWriter.finishWriting { () -> Void in
-                    print("-----video1 url = \(self.imageArrayToVideoURL)")
+                videoWriter.finishWriting {
+                    DispatchQueue.main.async {
+                        print("-----video1 url = \(self.imageArrayToVideoURL)")
+                        
+                        asset = AVAsset(url: imageArrayToVideoURL as URL)
+                    }
                     
-                    asset = AVAsset(url: imageArrayToVideoURL as URL)
-                    exportVideoWithAnimation()
+//                    exportVideoWithAnimation()
                 }
             })
         }
+        if !(imageArrayToVideoURL.absoluteString?.isEmpty ?? false) {
+            return self.imageArrayToVideoURL.absoluteString ?? ""
+        }else {
+            return "IsEmpty"
+        }
+        
     }
     
     func removeFileAtURLIfExists(url: NSURL) {
