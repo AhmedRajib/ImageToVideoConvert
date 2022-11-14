@@ -9,52 +9,60 @@ import Foundation
 import UIKit
 import AVFoundation
 
-class ImagesToVideoConvert {
-    
-    
+
+
+struct HomeScreendataModel {
     let outputSize = CGSize(width: 1920, height: 1280)
     let imagesPerSecond: TimeInterval = 2 //each image will be stay for 3 secs
     var selectedPhotosArray = [UIImage]()
     var imageArrayToVideoURL = NSURL()
     let audioIsEnabled: Bool = false //if your video has no sound
     var asset: AVAsset!
+}
+
+
+class ImagesToVideoConvert: ObservableObject {
+    
+    
+    @Published var dataModel = HomeScreendataModel()
+
     
     func buildVideoFromImageArray(selectedImages: [UIImage]) -> String {
         //           for image in 0..<5 {
         //               selectedPhotosArray.append(UIImage(named: "\(image + 1).JPG")!) //name of the images: 1.JPG, 2.JPG, 3.JPG, 4.JPG, 5.JPG
         //           }
-        selectedPhotosArray.append(contentsOf: selectedImages)
+        dataModel.selectedPhotosArray.append(contentsOf: selectedImages)
         
-        imageArrayToVideoURL = NSURL(fileURLWithPath: NSHomeDirectory() + "/Documents/video1.MP4")
-        removeFileAtURLIfExists(url: imageArrayToVideoURL)
-        guard let videoWriter = try? AVAssetWriter(outputURL: imageArrayToVideoURL as URL, fileType: AVFileType.mp4) else {
+        dataModel.imageArrayToVideoURL = NSURL(fileURLWithPath: NSHomeDirectory() + "/Documents/video1.MP4")
+        removeFileAtURLIfExists(url: dataModel.imageArrayToVideoURL)
+        guard let videoWriter = try? AVAssetWriter(outputURL: dataModel.imageArrayToVideoURL as URL, fileType: AVFileType.mp4) else {
             fatalError("AVAssetWriter error")
         }
-        let outputSettings = [AVVideoCodecKey : AVVideoCodecType.h264, AVVideoWidthKey : NSNumber(value: Float(outputSize.width)), AVVideoHeightKey : NSNumber(value: Float(outputSize.height))] as [String : Any]
+        let outputSettings = [AVVideoCodecKey : AVVideoCodecType.h264, AVVideoWidthKey : NSNumber(value: Float(dataModel.outputSize.width)), AVVideoHeightKey : NSNumber(value: Float(dataModel.outputSize.height))] as [String : Any]
         guard videoWriter.canApply(outputSettings: outputSettings, forMediaType: AVMediaType.video) else {
             fatalError("Negative : Can't apply the Output settings...")
         }
         let videoWriterInput = AVAssetWriterInput(mediaType: AVMediaType.video, outputSettings: outputSettings)
-        let sourcePixelBufferAttributesDictionary = [kCVPixelBufferPixelFormatTypeKey as String : NSNumber(value: kCVPixelFormatType_32ARGB), kCVPixelBufferWidthKey as String: NSNumber(value: Float(outputSize.width)), kCVPixelBufferHeightKey as String: NSNumber(value: Float(outputSize.height))]
+        let sourcePixelBufferAttributesDictionary = [kCVPixelBufferPixelFormatTypeKey as String : NSNumber(value: kCVPixelFormatType_32ARGB), kCVPixelBufferWidthKey as String: NSNumber(value: Float(dataModel.outputSize.width)), kCVPixelBufferHeightKey as String: NSNumber(value: Float(dataModel.outputSize.height))]
         let pixelBufferAdaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoWriterInput, sourcePixelBufferAttributes: sourcePixelBufferAttributesDictionary)
         if videoWriter.canAdd(videoWriterInput) {
             videoWriter.add(videoWriterInput)
         }
         if videoWriter.startWriting() {
-            let zeroTime = CMTimeMake(value: Int64(imagesPerSecond),timescale: Int32(1))
+            let zeroTime = CMTimeMake(value: Int64(dataModel.imagesPerSecond),timescale: Int32(1))
             videoWriter.startSession(atSourceTime: zeroTime)
             
             assert(pixelBufferAdaptor.pixelBufferPool != nil)
             let media_queue = DispatchQueue(label: "mediaInputQueue")
             videoWriterInput.requestMediaDataWhenReady(on: media_queue, using: { [self] () -> Void in
                 let fps: Int32 = 1
-                let framePerSecond: Int64 = Int64(imagesPerSecond)
-                let frameDuration = CMTimeMake(value: Int64(imagesPerSecond), timescale: fps)
+                let framePerSecond: Int64 = Int64(dataModel.imagesPerSecond)
+                let frameDuration = CMTimeMake(value: Int64(dataModel.imagesPerSecond), timescale: fps)
                 var frameCount: Int64 = 0
                 var appendSucceeded = true
-                while (!self.selectedPhotosArray.isEmpty) {
+                while (!self.dataModel.selectedPhotosArray.isEmpty) {
                     if (videoWriterInput.isReadyForMoreMediaData) {
-                        let nextPhoto = selectedPhotosArray.remove(at: 0)
+                        let nextPhoto = dataModel.selectedPhotosArray.remove(at: 0)
                         let lastFrameTime = CMTimeMake(value: frameCount * framePerSecond, timescale: fps)
                         let presentationTime = frameCount == 0 ? lastFrameTime : CMTimeAdd(lastFrameTime, frameDuration)
                         var pixelBuffer: CVPixelBuffer? = nil
@@ -64,15 +72,15 @@ class ImagesToVideoConvert {
                             CVPixelBufferLockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
                             let data = CVPixelBufferGetBaseAddress(managedPixelBuffer)
                             let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-                            let context = CGContext(data: data, width: Int(outputSize.width), height: Int(outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
-                            context!.clear(CGRect(x: 0, y: 0, width: CGFloat(outputSize.width), height: CGFloat(outputSize.height)))
-                            let horizontalRatio = CGFloat(outputSize.width) / nextPhoto.size.width
-                            let verticalRatio = CGFloat(outputSize.height) / nextPhoto.size.height
+                            let context = CGContext(data: data, width: Int(dataModel.outputSize.width), height: Int(dataModel.outputSize.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(managedPixelBuffer), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+                            context!.clear(CGRect(x: 0, y: 0, width: CGFloat(dataModel.outputSize.width), height: CGFloat(dataModel.outputSize.height)))
+                            let horizontalRatio = CGFloat(dataModel.outputSize.width) / nextPhoto.size.width
+                            let verticalRatio = CGFloat(dataModel.outputSize.height) / nextPhoto.size.height
                             //let aspectRatio = max(horizontalRatio, verticalRatio) // ScaleAspectFill
                             let aspectRatio = min(horizontalRatio, verticalRatio) // ScaleAspectFit
                             let newSize: CGSize = CGSize(width: nextPhoto.size.width * aspectRatio, height: nextPhoto.size.height * aspectRatio)
-                            let x = newSize.width < outputSize.width ? (outputSize.width - newSize.width) / 2 : 0
-                            let y = newSize.height < outputSize.height ? (outputSize.height - newSize.height) / 2 : 0
+                            let x = newSize.width < dataModel.outputSize.width ? (dataModel.outputSize.width - newSize.width) / 2 : 0
+                            let y = newSize.height < dataModel.outputSize.height ? (dataModel.outputSize.height - newSize.height) / 2 : 0
                             context?.draw(nextPhoto.cgImage!, in: CGRect(x: x, y: y, width: newSize.width, height: newSize.height))
                             CVPixelBufferUnlockBaseAddress(managedPixelBuffer, CVPixelBufferLockFlags(rawValue: CVOptionFlags(0)))
                             appendSucceeded = pixelBufferAdaptor.append(pixelBuffer, withPresentationTime: presentationTime)
@@ -89,17 +97,17 @@ class ImagesToVideoConvert {
                 videoWriterInput.markAsFinished()
                 videoWriter.finishWriting {
                     DispatchQueue.main.async {
-                        print("-----video1 url = \(self.imageArrayToVideoURL)")
+                        print("-----video1 url = \(self.dataModel.imageArrayToVideoURL)")
                         
-                        asset = AVAsset(url: imageArrayToVideoURL as URL)
+                        dataModel.asset = AVAsset(url: dataModel.imageArrayToVideoURL as URL)
                     }
                     
 //                    exportVideoWithAnimation()
                 }
             })
         }
-        if !(imageArrayToVideoURL.absoluteString?.isEmpty ?? false) {
-            return self.imageArrayToVideoURL.absoluteString ?? ""
+        if !(dataModel.imageArrayToVideoURL.absoluteString?.isEmpty ?? false) {
+            return self.dataModel.imageArrayToVideoURL.absoluteString ?? ""
         }else {
             return "IsEmpty"
         }
@@ -122,9 +130,9 @@ class ImagesToVideoConvert {
     func exportVideoWithAnimation() async {
         let composition = AVMutableComposition()
         
-        let track =  asset?.tracks(withMediaType: AVMediaType.video)
+        let track =  dataModel.asset?.tracks(withMediaType: AVMediaType.video)
         let videoTrack:AVAssetTrack = track![0] as AVAssetTrack
-        guard let timerange =  try? await CMTimeRangeMake(start: CMTime.zero, duration: (asset?.load(.duration))!) else {
+        guard let timerange =  try? await CMTimeRangeMake(start: CMTime.zero, duration: (dataModel.asset?.load(.duration))!) else {
             return
         }
         
@@ -138,10 +146,10 @@ class ImagesToVideoConvert {
         }
         
         //if your video has sound, you don’t need to check this
-        if audioIsEnabled {
+        if dataModel.audioIsEnabled {
             let compositionAudioTrack:AVMutableCompositionTrack = composition.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: CMPersistentTrackID())!
             
-            for audioTrack in (asset?.tracks(withMediaType: AVMediaType.audio))! {
+            for audioTrack in (dataModel.asset?.tracks(withMediaType: AVMediaType.audio))! {
                 do {
                     try compositionAudioTrack.insertTimeRange(audioTrack.timeRange, of: audioTrack, at: CMTime.zero)
                 } catch {
@@ -169,12 +177,12 @@ class ImagesToVideoConvert {
             
             let nextPhoto = imgarray[image]
             
-            let horizontalRatio = CGFloat(self.outputSize.width) / nextPhoto.size.width
-            let verticalRatio = CGFloat(self.outputSize.height) / nextPhoto.size.height
+            let horizontalRatio = CGFloat(self.dataModel.outputSize.width) / nextPhoto.size.width
+            let verticalRatio = CGFloat(self.dataModel.outputSize.height) / nextPhoto.size.height
             let aspectRatio = min(horizontalRatio, verticalRatio)
             let newSize: CGSize = CGSize(width: nextPhoto.size.width * aspectRatio, height: nextPhoto.size.height * aspectRatio)
-            let x = newSize.width < self.outputSize.width ? (self.outputSize.width - newSize.width) / 2 : 0
-            let y = newSize.height < self.outputSize.height ? (self.outputSize.height - newSize.height) / 2 : 0
+            let x = newSize.width < self.dataModel.outputSize.width ? (self.dataModel.outputSize.width - newSize.width) / 2 : 0
+            let y = newSize.height < self.dataModel.outputSize.height ? (self.dataModel.outputSize.height - newSize.height) / 2 : 0
             
             ///I showed 10 animations here. You can uncomment any of this and export a video to see the result.
             

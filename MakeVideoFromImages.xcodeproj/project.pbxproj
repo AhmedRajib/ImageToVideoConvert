@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4264541529197B6600F0598B /* ImagesToVideoConvert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4264541429197B6600F0598B /* ImagesToVideoConvert.swift */; };
 		427D2F2B291ADB13004E9EE8 /* mergeImageTwoVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427D2F2A291ADB13004E9EE8 /* mergeImageTwoVideo.swift */; };
+		428D18AD2922C1E50078E64A /* HomeScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428D18AC2922C1E50078E64A /* HomeScreenViewModel.swift */; };
+		428D18B02922CC860078E64A /* FullScreenVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428D18AF2922CC860078E64A /* FullScreenVideoPlayer.swift */; };
 		42DC304F291FC6E800E98944 /* PlayVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DC304E291FC6E800E98944 /* PlayVideo.swift */; };
 		A096168029190353000CFC4A /* MakeVideoFromImagesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */; };
 		A096168229190353000CFC4A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A096168129190353000CFC4A /* ContentView.swift */; };
@@ -23,6 +25,9 @@
 /* Begin PBXFileReference section */
 		4264541429197B6600F0598B /* ImagesToVideoConvert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesToVideoConvert.swift; sourceTree = "<group>"; };
 		427D2F2A291ADB13004E9EE8 /* mergeImageTwoVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mergeImageTwoVideo.swift; sourceTree = "<group>"; };
+		428D18AC2922C1E50078E64A /* HomeScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewModel.swift; sourceTree = "<group>"; };
+		428D18AE2922C80D0078E64A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		428D18AF2922CC860078E64A /* FullScreenVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenVideoPlayer.swift; sourceTree = "<group>"; };
 		42DC304E291FC6E800E98944 /* PlayVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayVideo.swift; sourceTree = "<group>"; };
 		A096167C29190353000CFC4A /* MakeVideoFromImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MakeVideoFromImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A096167F29190353000CFC4A /* MakeVideoFromImagesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeVideoFromImagesApp.swift; sourceTree = "<group>"; };
@@ -46,6 +51,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		428D18AB2922C1C40078E64A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				428D18AC2922C1E50078E64A /* HomeScreenViewModel.swift */,
+			);
+			name = ViewModel;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		A096167329190353000CFC4A = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +79,7 @@
 		A096167E29190353000CFC4A /* MakeVideoFromImages */ = {
 			isa = PBXGroup;
 			children = (
+				428D18AE2922C80D0078E64A /* Info.plist */,
 				A096169629190670000CFC4A /* Utilities */,
 				A096169029190569000CFC4A /* Presentation */,
 				A096168D29190541000CFC4A /* ViewModel */,
@@ -95,6 +110,7 @@
 		A096169029190569000CFC4A /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				428D18AB2922C1C40078E64A /* ViewModel */,
 				A096169229190594000CFC4A /* HomeView */,
 			);
 			path = Presentation;
@@ -124,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				A096169A29191808000CFC4A /* SelectedImages.swift */,
+				428D18AF2922CC860078E64A /* FullScreenVideoPlayer.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -198,11 +215,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				428D18B02922CC860078E64A /* FullScreenVideoPlayer.swift in Sources */,
 				42DC304F291FC6E800E98944 /* PlayVideo.swift in Sources */,
 				A096169B29191809000CFC4A /* SelectedImages.swift in Sources */,
 				4264541529197B6600F0598B /* ImagesToVideoConvert.swift in Sources */,
 				A096168229190353000CFC4A /* ContentView.swift in Sources */,
 				A09616982919075D000CFC4A /* ShowCameraView.swift in Sources */,
+				428D18AD2922C1E50078E64A /* HomeScreenViewModel.swift in Sources */,
 				A0961694291905AA000CFC4A /* HomeView.swift in Sources */,
 				A096168F29190561000CFC4A /* HomeViewModel.swift in Sources */,
 				A096168029190353000CFC4A /* MakeVideoFromImagesApp.swift in Sources */,
@@ -338,6 +357,8 @@
 				DEVELOPMENT_TEAM = M6Q74PY9M3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MakeVideoFromImages/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -368,6 +389,8 @@
 				DEVELOPMENT_TEAM = M6Q74PY9M3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MakeVideoFromImages/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
