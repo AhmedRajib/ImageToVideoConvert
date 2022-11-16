@@ -32,7 +32,7 @@ struct HomeView: View {
             Button {
                 showGallery = true
             } label: {
-                Text("Upload images ")
+                Text("Upload images")
                     .frame(width: 150,height: 40)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(10)

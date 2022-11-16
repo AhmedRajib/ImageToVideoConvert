@@ -15,8 +15,6 @@ struct FullScreenVideoPlayer: View {
         ZStack {
             Color.gray.opacity(0.6)
             let player = AVPlayer(url: urlOfVideo)
-            let _ = print("Main URL OF VIDEO \(urlOfVideo.absoluteString)")
-
             VideoPlayer(player: player)
                 
                 .onAppear() {
