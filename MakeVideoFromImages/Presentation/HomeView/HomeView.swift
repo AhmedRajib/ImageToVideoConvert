@@ -19,7 +19,9 @@ struct HomeView: View {
     // MARK: - PhPicker
     @State private var selectedItems = [PhotosPickerItem]()
     @State private var selectedImages = [UIImage]()
+    @State private var videoURL: [String]?
     @ObservedObject var vm = ImagesToVideoConvert()
+    @State var showGallery: Bool = false
     @State var showingDetail = false
     
     var body: some View {
@@ -27,19 +29,16 @@ struct HomeView: View {
             
             SelectedImages(selectedImages: $selectedImages)
             
-            PhotosPicker(selection: $selectedItems,maxSelectionCount: 0,matching: .any(of: [.images, .videos])) {
-                Label(selectedImages.count > 0 ? "Change Images?" : "Select ImagesFor Making Video" , image: "photo.artframe")
+            Button {
+                showGallery = true
+            } label: {
+                Text("Upload images ")
+                    .frame(width: 150,height: 40)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(10)
             }
-            .onChange(of: selectedItems) { newValues in
-                Task {
-                    selectedItems = []
-                    for image in newValues {
-                        if let imageData = try? await image.loadTransferable(type: Data.self), let image = UIImage(data: imageData) {
-                            selectedImages.append(image)
-                        }
-                    }
-                    
-                }
+            .fullScreenCover(isPresented: $showGallery) {
+                VideoPicker(videoURL: $videoURL,selectedImages: $selectedImages)
             }
             
             Spacer()
@@ -49,17 +48,24 @@ struct HomeView: View {
                     // MARK: - Handle Button Actions
                     urlOfVideo =  vm.buildVideoFromImageArray(selectedImages: selectedImages)
                 } label: {
-                    Text("Make Videos")
+                    Text("Make Video")
+                        .frame(width: 150,height: 40)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+
                 }
             }
             
             if !(vm.dataModel.imageArrayToVideoURL.absoluteString?.isEmpty ?? (URL(string: "") != nil)) {
                 Button {
                     // MARK: - Handle Button Actions
-//                    selectedImages = []
                     self.showingDetail.toggle()
                 } label: {
                     Text("Show Video")
+                        .frame(width: 150,height: 40)
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+
                 }
                 .sheet(isPresented: $showingDetail) {
                     FullScreenVideoPlayer(urlOfVideo: vm.dataModel.imageArrayToVideoURL as URL)
@@ -69,8 +75,8 @@ struct HomeView: View {
     }
 }
 
-//struct HomeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView()
-//    }
-//}
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
+}

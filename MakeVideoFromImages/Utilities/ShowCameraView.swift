@@ -22,6 +22,10 @@ class ImagePickerCoordinator: NSObject, UINavigationControllerDelegate, UIImageP
             image = uiImage
             isShown = false
         }
+        if let mediaUrl = info[.mediaURL] as? URL {
+            return
+        }
+            
         
     }
     

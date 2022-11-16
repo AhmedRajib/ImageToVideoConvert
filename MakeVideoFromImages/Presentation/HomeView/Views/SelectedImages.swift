@@ -25,9 +25,10 @@ struct SelectedImages: View {
                 }
                 .padding(.horizontal, 16)
             }else {
-                Image(systemName: "video.slash")
+                Image(systemName: "photo.on.rectangle.angled")
                     .resizable()
                     .frame(width: 200,height: 200)
+                    .scaledToFit()
                     .foregroundColor(.gray.opacity(0.2))
                     .padding()
             }
